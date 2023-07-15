@@ -54,7 +54,8 @@ pipeline {
                 steps {
                     script {
                       withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'springboot-K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
-                        sh " helm upgrade --install ${appName} /var/lib/jenkins/workspace/springboot-app_master/springboot -f values.yaml --set imageName=${ECR_REPO} ,imageTag=${IMAGE}"
+                        sh "helm upgrade --install ${appName} /var/lib/jenkins/workspace/springboot-app_master/springboot -f values.yaml --set imageName=${ECR_REPO},imageTag=${IMAGE}"
+                            }  
                         }  
                     }
                 }
