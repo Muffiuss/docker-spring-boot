@@ -12,8 +12,8 @@ public class StartApplication {
 
     @GetMapping("/")
     public String index(final Model model) {
-        model.addAttribute("title", "Howdy Folks..Welcome to Devops Coaching by Coach AK!");
-        model.addAttribute("msg", "Hello All..We are deploying using Helm...into EKS cluster!!!!");
+        model.addAttribute("title", "Hello.. Welcome to Muffius' SpringBootJavaApp I hope you like what you see!");
+        model.addAttribute("msg", "Hello All! if you're reading this, you just deployed using helm!");
         return "index";
     }
 

@@ -1,0 +1,11 @@
+appName: springbootapp
+replicasSet: 2
+imagePullSecretsName: ecr-registry-key
+imagePullPolicy: Always
+
+containerPort: 8080
+servicePort: 8080
+serviceType: LoadBalancer
+
+imageName: ""
+imageTag: ""
