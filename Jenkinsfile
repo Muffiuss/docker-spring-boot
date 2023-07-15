@@ -7,6 +7,7 @@ pipeline {
         ECR_REPO = "${ECR_SERVER}/spring-boot-app"
         ECR_SERVER = '874503558975.dkr.ecr.us-east-1.amazonaws.com'
         appName = 'springbootapp'
+        IMAGE = "${VERSION}-${BUILD_NUMBER}"
     }
 
         stages {
@@ -16,7 +17,7 @@ pipeline {
                         sh "mvn build-helper:parse-version versions:set -DnewVersion=\\${parsedVersion.majorVersion}.\\${parsedVersion.minorVersion}.\\${parsedVersion.nextIncrementalVersion} versions:commit"
                         def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                         def VERSION = matcher[0][1]
-                        def env.IMAGE = "${VERSION}-${BUILD_NUMBER}"
+                        
                     }
                 }
             }
