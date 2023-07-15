@@ -55,17 +55,9 @@ pipeline {
             steps {
                 script {
                     def IMAGE = "${VERSION}-${BUILD_NUMBER}"
-                    withKubeConfig(
-                        caCertificate: ''
-                        clusterName: '',
-                        contextName: '',
-                        credentialsId: 'springboot-K8S',
-                        namespace: '',
-                        restrictKubeConfigAccess: false,
-                        serverUrl: ''
-                    ) {
-                        sh "helm upgrade --install ${appName} springboot --set imageName=${ECR_REPO},imageTag=${IMAGE}"
-                    }
+                    withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'springboot-K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                            sh "helm upgrade --install ${appName} springboot --set imageName=${ECR_REPO},imageTag=${IMAGE}"
+                        }
                 }
             }
         }
