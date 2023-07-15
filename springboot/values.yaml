@@ -4,7 +4,7 @@ imagePullSecretsName: ecr-registry-key
 imagePullPolicy: Always
 
 containerPort: 8080
-servicePort: 8080
+servicePort: 80
 serviceType: LoadBalancer
 
 imageName: ""
