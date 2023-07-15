@@ -1,5 +1,5 @@
 appName: springbootapp
-replicasSet: 1
+replicasSet: 2
 imagePullSecretsName: ecr-registry-key
 imagePullPolicy: Always
 
