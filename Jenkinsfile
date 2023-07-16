@@ -81,7 +81,7 @@ pipeline {
             steps {
                 script {
                     def IMAGE = "${VERSION}-${BUILD_NUMBER}"
-                    def credentialsId = "${params.DEPLOY_ENV}-springboot-K8S"  // Assuming unique credentials for each environment
+                    def credentialsId = "${params.DEPLOY_ENV}-springboot-K8S" 
                      def serverUrl = getServerUrl()  
                     withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: credentialsId, namespace: '', restrictKubeConfigAccess: false, serverUrl: serverUrl) {
                         sh "helm upgrade --install ${appName} springboot --set imageName=${ECR_REPO},imageTag=${IMAGE}"
