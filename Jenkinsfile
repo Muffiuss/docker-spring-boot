@@ -1,3 +1,16 @@
+
+def getServerUrl() {
+    if (params.DEPLOY_ENV == 'DEV') {
+        return env.DEV_K8S_URL 
+    } else if (params.DEPLOY_ENV == 'STAGE') {
+        return env.STAGE_K8S_URL
+    } else if (params.DEPLOY_ENV == 'PROD') {
+        return env.PROD_K8S_URL
+    } else {
+        error("Unknown DEPLOY_ENV: ${params.DEPLOY_ENV}")
+    }
+}
+
 def VERSION
 
 pipeline {
@@ -5,7 +18,20 @@ pipeline {
     tools {
         maven 'Maven'
     }
+
+    parameters {
+        choice(
+            name: 'DEPLOY_ENV',
+            choices: ['DEV', 'TEST', 'PROD'],
+            description: 'The target environment'
+        )
+    }
+
     environment {
+        DEV_K8S_URL = 'https://9F4C603BF6FEE994C36A61151A72F2B7.gr7.us-east-1.eks.amazonaws.com'
+        STAGE_K8S_URL = 'https://B315EA83323C15E4655107BB46BF9686.gr7.us-east-1.eks.amazonaws.com'
+        PROD_K8S_URL = 'https://2B65C0B147DC881DA5DBD12467901DB2.yl4.us-east-1.eks.amazonaws.com'
+
         ECR_REPO = "${ECR_SERVER}/spring-boot-app"
         ECR_SERVER = '874503558975.dkr.ecr.us-east-1.amazonaws.com'
         appName = 'springbootapp'
@@ -55,9 +81,11 @@ pipeline {
             steps {
                 script {
                     def IMAGE = "${VERSION}-${BUILD_NUMBER}"
-                    withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'springboot-K8S', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
-                            sh "helm upgrade --install ${appName} springboot --set imageName=${ECR_REPO},imageTag=${IMAGE}"
-                        }
+                    def credentialsId = "${params.DEPLOY_ENV}-springboot-K8S"  // Assuming unique credentials for each environment
+                     def serverUrl = getServerUrl()  
+                    withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: credentialsId, namespace: '', restrictKubeConfigAccess: false, serverUrl: serverUrl) {
+                        sh "helm upgrade --install ${appName} springboot --set imageName=${ECR_REPO},imageTag=${IMAGE}"
+                    }
                 }
             }
         }
